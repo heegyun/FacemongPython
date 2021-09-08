@@ -6,7 +6,7 @@ import cv2
 import numpy
 
 
-app=Flask(__name__)
+app=Flask(__name__,static_folder='./ims/2/gan')
 
 # VideoCapture () 객체를 만들어 카메라를 트리거하고 
 # 비디오의 첫 번째 이미지 / 프레임을 읽는다. 
@@ -44,12 +44,12 @@ def gen_frames():
             break
         else:
             gray = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-            edge = cv2.Canny(gray, 10,200,apertureSize=3)
+            edge = cv2.Canny(gray, 10,200,apertureSize=3) # 윤곽선
             vis= img.copy()
             vis = numpy.trunc(vis / 2)
-            vis[edge != 0] = (0, 255, 0) # 테두리 감지
+            vis[edge != 0] = (0, 255, 0) 
             merge = numpy.concatenate((img, vis), axis=1)
-            cv2.imwrite('out.png', merge)
+            cv2.imwrite('out.png', merge) # 프레임 받아서 저장
             frame = open('out.png', 'rb').read()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show result
